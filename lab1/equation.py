@@ -2,6 +2,7 @@ from typing import Type
 import numpy
 
 class Function_Generic():
+    '''Abstract generic class'''
     return_type = None
     x_type = None
 
@@ -15,6 +16,8 @@ class Function_Generic():
         return self.x_type
 
 class Function_F(Function_Generic):
+    '''Function F class'''
+
     return_type = int
     x_type = int
 
@@ -25,10 +28,13 @@ class Function_F(Function_Generic):
         self.d = d
 
     def get_value(self, x: int) -> int:
+        # returns function value for given x
         result = self.a * x**3 + self.b * x**2 + self.c * x + self.d
         return result
 
 class Function_G(Function_Generic):
+    '''Function G class'''
+
     return_type = int
     x_type = numpy.matrix
 
@@ -38,7 +44,6 @@ class Function_G(Function_Generic):
         self.a = a
 
     def get_value(self, x: numpy.matrix) -> int:
-        b_part = self.b.transpose() * x
-        a_part = x.transpose() * self.a * x
-        result = self.c + b_part + a_part
+        # returns function value for given x
+        result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
         return numpy.asscalar(result)
