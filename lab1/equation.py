@@ -54,3 +54,7 @@ class Function_G(Function_Generic):
         # returns function value for given x
         result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
         return numpy.asscalar(result)
+
+    def get_derivative_value(self, x: numpy.matrix) -> numpy.matrix:
+        result = self.b + 2 * self.a * x
+        return result
