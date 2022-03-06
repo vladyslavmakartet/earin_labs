@@ -12,6 +12,9 @@ class Function_Generic():
     def get_value(self) -> None:
         pass
 
+    def get_derivative_value(self) -> None:
+        pass
+
     def get_x_type(self) -> Type:
         return self.x_type
 
@@ -30,6 +33,10 @@ class Function_F(Function_Generic):
     def get_value(self, x: int) -> int:
         # returns function value for given x
         result = self.a * x**3 + self.b * x**2 + self.c * x + self.d
+        return result
+
+    def get_derivative_value(self, x: int) -> int:
+        result = 3 * self.a * x**2 + 2 * self.b * x + self.c
         return result
 
 class Function_G(Function_Generic):
