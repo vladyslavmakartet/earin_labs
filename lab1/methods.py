@@ -17,7 +17,10 @@ class CalculationMethod():
 class GradientDescent(CalculationMethod):
 
     @staticmethod
-    def calculate_minimum(function: Function_Generic, x: Union[float, numpy.matrix], break_condition: int, break_condition_value: Any) -> float:
+    def calculate_minimum(function: Function_Generic,
+                          x: Union[float, numpy.matrix],
+                          break_condition: int,
+                          break_condition_value: Any) -> float:
         beta = 0.01
         i = 0
         start_time = time.time()
@@ -40,5 +43,8 @@ class GradientDescent(CalculationMethod):
 class NewtonMethod(CalculationMethod):
 
     @staticmethod
-    def calculate_minimum(function: Function_Generic, x: Union[float, numpy.matrix], break_condition: int, break_condition_value: Any) -> float:
+    def calculate_minimum(function: Function_Generic,
+                          x: Union[float, numpy.matrix],
+                          break_condition: int,
+                          break_condition_value: Any) -> float:
         pass
