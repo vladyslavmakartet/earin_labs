@@ -17,7 +17,7 @@ def gradient_based_method(function: equation.Function_G, current_sol, choice) ->
     start_time = time.time()
     while step_size > precision and iteration < max_iteration and exe_time < max_exe_time:
         prev_x = current_sol
-        current_sol = current_sol - function.get_derivative_value(prev_x) * rate
+        current_sol = current_sol - function.get_gradient_value(prev_x) * rate
         step_size = abs(function.get_value(current_sol) - function.get_value(prev_x))
         iteration = iteration + 1
         exe_time = time.time() - start_time
