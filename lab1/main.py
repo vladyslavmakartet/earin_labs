@@ -22,7 +22,7 @@
 
 import numpy
 import equation
-from gradient_based_method import gradient_based_method
+from methods import GradientDescent
 
 def main() -> None:
     example_function = equation.Function_F(0.25, 2, 3, 1)
@@ -39,7 +39,7 @@ def main() -> None:
     print("G Derivative:", example_g.get_gradient_value(x))
     
     print('============================================================')
-    print(gradient_based_method(example_g, numpy.array([[1],[2],[3]]),1))
+    print(GradientDescent.calculate_minimum(example_g, numpy.matrix([[1],[2],[3]]),10))
     print('============================================================')
 if __name__ == "__main__":
     main()

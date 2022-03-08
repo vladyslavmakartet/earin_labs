@@ -55,10 +55,8 @@ class Function_G(Function_Generic):
 
     def get_value(self, x: numpy.matrix) -> float:
         # returns function value for given x
-        # result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
-        # return numpy.asscalar(result)
-        result = self.c + numpy.dot(self.b.transpose(), x) + numpy.dot(numpy.dot(x.transpose(), self.a), x)
-        return result
+        result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
+        return numpy.asscalar(result)
 
     def get_gradient_value(self, x: numpy.matrix) -> numpy.matrix:
         result = self.b + self.a * x + self.a.transpose() * x # derivative calculated from matrixcalculus.org
