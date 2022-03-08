@@ -1,6 +1,6 @@
 import numpy
 import equation
-from methods import GradientDescent
+from methods import GradientDescent, BREAK_TIME
 
 def main() -> None:
     example_function = equation.Function_F(0.25, 2, 3, 1)
@@ -17,7 +17,7 @@ def main() -> None:
     print("G Derivative:", example_g.get_gradient_value(x))
     
     print('============================================================')
-    print(GradientDescent.calculate_minimum(example_g, numpy.matrix([[1],[2],[3]]),10))
+    print(GradientDescent.calculate_minimum(example_g, numpy.matrix([[1],[2],[3]]), BREAK_TIME, 1))
     print('============================================================')
 if __name__ == "__main__":
     main()
