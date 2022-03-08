@@ -1,6 +1,7 @@
 from typing import Any, Type
 import numpy
 
+
 class Function_Generic():
     '''Abstract generic class'''
     return_type = None
@@ -17,6 +18,7 @@ class Function_Generic():
 
     def get_x_type(self) -> Type:
         return self.x_type
+
 
 class Function_F(Function_Generic):
     '''Function F class'''
@@ -39,6 +41,7 @@ class Function_F(Function_Generic):
         result = 3 * self.a * x**2 + 2 * self.b * x + self.c
         return result
 
+
 class Function_G(Function_Generic):
     '''Function G class'''
 
@@ -52,8 +55,10 @@ class Function_G(Function_Generic):
 
     def get_value(self, x: numpy.matrix) -> float:
         # returns function value for given x
-        result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
-        return numpy.asscalar(result)
+        # result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
+        # return numpy.asscalar(result)
+        result = self.c + numpy.dot(self.b.transpose(), x) + numpy.dot(numpy.dot(x.transpose(), self.a), x)
+        return result
 
     def get_gradient_value(self, x: numpy.matrix) -> numpy.matrix:
         result = self.b + self.a * x + self.a.transpose() * x # derivative calculated from matrixcalculus.org
