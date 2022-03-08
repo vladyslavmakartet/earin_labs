@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Any, Type
 import numpy
 
 
@@ -9,11 +9,11 @@ class Function_Generic():
 
     def get_return_type(self) -> Type:
         return self.return_type
-
-    def get_value(self) -> None:
+    
+    def get_value(self, x: Any) -> Any:
         pass
 
-    def get_derivative_value(self) -> None:
+    def get_gradient_value(self, x: Any) -> Any:
         pass
 
     def get_x_type(self) -> Type:
@@ -26,18 +26,18 @@ class Function_F(Function_Generic):
     return_type = int
     x_type = int
 
-    def __init__(self, a: int, b: int, c: int, d: int) -> None:
+    def __init__(self, a: float, b: float, c: float, d: float) -> None:
         self.a = a
         self.b = b
         self.c = c
         self.d = d
 
-    def get_value(self, x: int) -> int:
+    def get_value(self, x: float) -> float:
         # returns function value for given x
         result = self.a * x**3 + self.b * x**2 + self.c * x + self.d
         return result
 
-    def get_derivative_value(self, x: int) -> int:
+    def get_gradient_value(self, x: float) -> float:
         result = 3 * self.a * x**2 + 2 * self.b * x + self.c
         return result
 
@@ -48,28 +48,18 @@ class Function_G(Function_Generic):
     return_type = int
     x_type = numpy.matrix
 
-    def __init__(self,  a: numpy.matrix, b: numpy.matrix, c: int) -> None:
+    def __init__(self,  a: numpy.matrix, b: numpy.matrix, c: float) -> None:
         self.c = c
         self.b = b
         self.a = a
 
-    def get_a(self) -> numpy.matrix:
-        return self.a
-
-    def get_b(self) -> numpy.matrix:
-        return self.b
-
-    def get_c(self) -> int:
-        return self.c
-
-    def get_value(self, x: numpy.matrix) -> int:
+    def get_value(self, x: numpy.matrix) -> float:
         # returns function value for given x
         # result = self.c + self.b.transpose() * x + x.transpose() * self.a * x
         # return numpy.asscalar(result)
         result = self.c + numpy.dot(self.b.transpose(), x) + numpy.dot(numpy.dot(x.transpose(), self.a), x)
         return result
 
-    def get_derivative_value(self, x: numpy.matrix) -> numpy.matrix:
-        # result = self.b + 2 * self.a * x
-        result = 2*numpy.dot(self.a , x) + self.b
+    def get_gradient_value(self, x: numpy.matrix) -> numpy.matrix:
+        result = self.b + self.a * x + self.a.transpose() * x # derivative calculated from matrixcalculus.org
         return result

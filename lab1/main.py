@@ -25,7 +25,7 @@ import equation
 from gradient_based_method import gradient_based_method
 
 def main() -> None:
-    example_function = equation.Function_F(1, 2, 3, 4)
+    example_function = equation.Function_F(0.25, 2, 3, 1)
     print("F Type:", example_function.get_x_type())
     print("F Value for 2:", example_function.get_value(2))
     print("F Derivative for 2:", example_function.get_derivative_value(2))
