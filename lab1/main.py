@@ -20,5 +20,8 @@ def main() -> None:
     print(GradientDescent.calculate_minimum(example_function, 1, BREAK_ITERATIONS, 200))
     print(NewtonMethod.calculate_minimum(example_function, 1, BREAK_ITERATIONS, 200))
     print('============================================================')
+    print(GradientDescent.calculate_minimum(example_g, numpy.matrix([[1], [2], [3]]), BREAK_ITERATIONS, 200))
+    print(NewtonMethod.calculate_minimum(example_g, numpy.matrix([[1], [2], [3]]), BREAK_ITERATIONS, 200))
+    print('============================================================')
 if __name__ == "__main__":
     main()

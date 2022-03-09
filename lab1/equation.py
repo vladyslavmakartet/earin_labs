@@ -70,5 +70,5 @@ class Function_G(Function_Generic):
         return result
 
     def get_gradient_square_value(self, x: numpy.matrix) -> numpy.matrix:
-        result = self.a + self.a.transpose() # derivative calculated using matrixcalculus.org
+        result = self.a.transpose() + self.a # derivative calculated using matrixcalculus.org
         return result
