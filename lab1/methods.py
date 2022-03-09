@@ -38,7 +38,7 @@ class GradientDescent(CalculationMethod):
                 current_value = function.get_value(x)
                 if current_value <= break_condition_value:
                     break
-        return function.get_value(x)
+        return x, function.get_value(x)
 
 class NewtonMethod(CalculationMethod):
 
@@ -54,7 +54,11 @@ class NewtonMethod(CalculationMethod):
                 inverse_of_square_gradient = 1 / function.get_gradient_square_value(x)
             else:
                 inverse_of_square_gradient = numpy.linalg.inv(function.get_gradient_square_value(x))
-            x = x - inverse_of_square_gradient * function.get_gradient_value(x)
+            # print("inverse of square", inverse_of_square_gradient)
+            # print("gradient val", function.get_gradient_value(x))
+            # print("x", x)
+            # print("mult", inverse_of_square_gradient * function.get_gradient_value(x))
+            x =  - inverse_of_square_gradient * function.get_gradient_value(x)
             if break_condition == BREAK_ITERATIONS:
                 i += 1
                 if i >= break_condition_value:
@@ -67,4 +71,4 @@ class NewtonMethod(CalculationMethod):
                 current_value = function.get_value(x)
                 if current_value <= break_condition_value:
                     break
-        return function.get_value(x)
+        return x, function.get_value(x)
