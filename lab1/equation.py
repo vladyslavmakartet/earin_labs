@@ -26,8 +26,8 @@ class Function_Generic():
 class Function_F(Function_Generic):
     '''Function F class'''
 
-    return_type = int
-    x_type = int
+    return_type = float
+    x_type = float
 
     def __init__(self, a: float, b: float, c: float, d: float) -> None:
         self.a = a
@@ -52,7 +52,7 @@ class Function_F(Function_Generic):
 class Function_G(Function_Generic):
     '''Function G class'''
 
-    return_type = int
+    return_type = float
     x_type = numpy.matrix
 
     def __init__(self,  a: numpy.matrix, b: numpy.matrix, c: float) -> None:
