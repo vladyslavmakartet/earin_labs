@@ -16,6 +16,9 @@ class Function_Generic():
     def get_gradient_value(self, x: Any) -> Any:
         pass
 
+    def get_gradient_square_value(self, x: Any) -> Any:
+        pass
+
     def get_x_type(self) -> Type:
         return self.x_type
 
@@ -41,6 +44,10 @@ class Function_F(Function_Generic):
         result = 3 * self.a * x**2 + 2 * self.b * x + self.c
         return result
 
+    def get_gradient_square_value(self, x: float) -> float:
+        result = 6 * self.a * x + 2 * self.b
+        return result
+
 
 class Function_G(Function_Generic):
     '''Function G class'''
@@ -59,5 +66,9 @@ class Function_G(Function_Generic):
         return numpy.asscalar(result)
 
     def get_gradient_value(self, x: numpy.matrix) -> numpy.matrix:
-        result = self.b + self.a * x + self.a.transpose() * x # derivative calculated from matrixcalculus.org
+        result = self.b + self.a * x + self.a.transpose() * x # derivative calculated using matrixcalculus.org
+        return result
+
+    def get_gradient_square_value(self, x: numpy.matrix) -> numpy.matrix:
+        result = self.a + self.a.transpose() # derivative calculated using matrixcalculus.org
         return result
