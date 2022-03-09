@@ -58,7 +58,7 @@ class NewtonMethod(CalculationMethod):
             # print("gradient val", function.get_gradient_value(x))
             # print("x", x)
             # print("mult", inverse_of_square_gradient * function.get_gradient_value(x))
-            x =  - inverse_of_square_gradient * function.get_gradient_value(x)
+            x = x - inverse_of_square_gradient * function.get_gradient_value(x)
             if break_condition == BREAK_ITERATIONS:
                 i += 1
                 if i >= break_condition_value:
