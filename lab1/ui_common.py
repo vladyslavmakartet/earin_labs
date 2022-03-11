@@ -116,6 +116,14 @@ def is_positive_definite(A):
     numpy.linalg.cholesky(A)
     return True
 
+def ask_for_batch():
+    print("Would you like to run the program in batch/restart mode (yes: 1, no: 0)")
+    batch = getNumericChoice("batch/restart mode", [0, 1])
+    batch_number = 0
+    if batch == 1:
+        batch_number = getNumericScalar(
+            "how many times to restart", type_="int", onlyPositive=True)
+    return batch, batch_number
 
 def print_parameters(params: dict):
     func_type = "F(x)" if params['function_type'] == 1 else "G(x)"

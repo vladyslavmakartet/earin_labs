@@ -1,9 +1,8 @@
 import equation
 import numpy
-from ui_common import getNumericChoice, getNumericScalar, format_input, stopping_conditions, start_point, is_symmetric, is_positive_definite, print_parameters
+from ui_common import getNumericChoice, getNumericScalar, format_input, stopping_conditions, start_point, is_symmetric, is_positive_definite, print_parameters, ask_for_batch
 from methods import NewtonMethod, GradientDescent
 # To do:
-# add try with another method
 # add error message with question if want to continue
 # if have time, change starting point in printing parameters to more meaningful
 header_text = '''
@@ -14,6 +13,7 @@ header_text = '''
 ===============================================================================
 '''
 separation_line = '===============================================================================\n'
+yes = ['y', 'yes', 'Y', 'Yes']
 # function_types = '''
 # F(x) = a*x^3+b*x^2+c*x+d (a, b, c, d are scalar numbers)
 # G(x) = c+(b^T)*x+(x^T)*A*x (c - scalar number, b - d-dimensional vector, A - positive-definite matrix)
@@ -94,14 +94,24 @@ def ui():
                 continue
             break
 
-    print("Would you like to run the program in batch/restart mode (yes: 1, no: 0)")
-    params["batch"] = getNumericChoice("batch/restart mode", [0, 1])
-    if params["batch"] == 1:
-        params["batch_number"] = getNumericScalar(
-            "how many times to restart", type_="int", onlyPositive=True)
+
+    params["batch"], params["batch_number"] = ask_for_batch()
     print(separation_line)
     print_parameters(params)
     run_program(params)
+    
+    ans = 'y'
+    while ans in yes:
+        print(separation_line)
+        ans = input('=   Would you like run another method (y | n):')
+        if ans in yes:
+            params["batch"], params["batch_number"] = ask_for_batch()
+            print("Please select method to use (Gradient: 1, Newton: 2): ")
+            params["method"] = getNumericChoice("method", [1, 2])
+            print(separation_line)
+            print_parameters(params)            
+            run_program(params)
+            print(separation_line)
 
 
 def run_program(params: dict):
@@ -127,9 +137,9 @@ def run_program(params: dict):
                 found_func_values.append(func_value)
             print("=   Results of", params["batch_number"], "iterations.")
             print(
-                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")
+                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")  # fix for nonetype
             print(
-                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")
+                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")  # fix for nonetype
             print("=   Obtained solutions for each program execution:")
             for i in range(len(found_xs)):
                 print(f"\nIteration #{i}: ")
@@ -145,6 +155,9 @@ def run_program(params: dict):
                                                      params["start_point"], params["stop_cond_type"], params["stop_cond_value"]))
     except ValueError as e:
         print(e)
+    except TypeError as e:
+        print(
+            f"ERROR: {e}. This error may result due to overflow as calculations go to infinity. Please input correct values!")
 
 
 # params["start_point"]
