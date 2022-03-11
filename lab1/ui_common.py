@@ -86,24 +86,30 @@ def start_point(function_type: int, vector_size=None):
         while True:
             try:
                 start_point = input(
-                    'Please define range for uniform distribution (i.e.: 1,2): ')
+                    'Please define range for uniform distribution (i.e.: 1,2) ([low, high]): ')
                 start_point = format_input(start_point, ',')
                 if all(isinstance(e, (int, float)) for e in start_point) and len(start_point) == 2:
                     if vector_size == None:
                         start_point = numpy.asarray(start_point).astype(float)
-                        start_point = numpy.random.uniform(int(start_point[0]), int(
-                            start_point[1]))  # case with F(x) func for 1 point
+                        if int(start_point[0]) >= int(start_point[1]):
+                            raise ValueError
+                        else:
+                            start_point = numpy.random.uniform(int(start_point[0]), int(
+                                start_point[1]))  # case with F(x) func for 1 point
 
                     else:
-                        start_point = numpy.random.uniform(int(start_point[0]), int(
-                            start_point[1]), vector_size)  # case with G(x) func for size of vector points
-                        start_point = numpy.asmatrix(
-                            [[i] for i in start_point])
+                        if int(start_point[0]) >= int(start_point[1]):
+                            raise ValueError
+                        else:
+                            start_point = numpy.random.uniform(int(start_point[0]), int(
+                                start_point[1]), vector_size)  # case with G(x) func for size of vector points
+                            start_point = numpy.asmatrix(
+                                [[i] for i in start_point])
                 else:
                     raise ValueError
             except ValueError:
                 print(
-                    'ERROR: Only two numeric numbers allowed! Please try again!\n')
+                    'ERROR: Only two numeric numbers in ([low, high]) order allowed! Low cannot be >= High. Please try again!\n')
                 continue
             break
     return start_point
