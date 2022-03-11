@@ -3,8 +3,7 @@ import numpy
 import sys
 from ui_common import getNumericChoice, getNumericScalar, format_input, stopping_conditions, start_point, is_symmetric, is_positive_definite, print_parameters, ask_for_batch
 from methods import NewtonMethod, GradientDescent
-# To do:
-# if have time, change starting point in printing parameters to more meaningful
+
 header_text = '''
 ===============================================================================
 #   Gradient Descent method and Newton's method for function minimalization   #
@@ -162,8 +161,3 @@ def run_program(params: dict):
     except TypeError as e:
         print(
             f"ERROR: {e}. This error may result due to overflow as calculations go to infinity. Please input correct values!")
-
-
-# params["start_point"]
-if __name__ == "__main__":  # for test only
-    ui()
