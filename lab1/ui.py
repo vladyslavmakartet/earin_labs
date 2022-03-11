@@ -140,9 +140,9 @@ def run_program(params: dict):
                 found_func_values.append(func_value)
             print("=   Results of", params["batch_number"], "iterations.")
             print(
-                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")  # fix for nonetype
+                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")
             print(
-                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")  # fix for nonetype
+                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")
             print("=   Obtained solutions for each program execution:")
             for i in range(len(found_xs)):
                 print(f"\nIteration #{i}: ")
