@@ -4,12 +4,8 @@ import numpy
 
 class Function_Generic():
     '''Abstract generic class'''
-    return_type = None
     x_type = None
 
-    def get_return_type(self) -> Type:
-        return self.return_type
-    
     def get_value(self, x: Any) -> Any:
         pass
 
@@ -26,7 +22,6 @@ class Function_Generic():
 class Function_F(Function_Generic):
     '''Function F class'''
 
-    return_type = float
     x_type = float
 
     def __init__(self, a: float, b: float, c: float, d: float) -> None:
@@ -52,7 +47,6 @@ class Function_F(Function_Generic):
 class Function_G(Function_Generic):
     '''Function G class'''
 
-    return_type = float
     x_type = numpy.matrix
 
     def __init__(self,  a: numpy.matrix, b: numpy.matrix, c: float) -> None:
