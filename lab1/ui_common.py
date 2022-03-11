@@ -45,8 +45,8 @@ def format_input(text, delimiter) -> list:
 def stopping_conditions(function_type: str):
     print(f"""Please choose preferred stopping condition
           1. Maximum number of iterations
-          2. Desired value {function_type} to reach
-          3. Maximum computation time in seconds
+          2. Maximum computation time in seconds
+          3. Desired value {function_type} to reach
           """)
     choice = getNumericChoice("stopping condition", [1, 2, 3])
     if choice == 1:
@@ -58,30 +58,53 @@ def stopping_conditions(function_type: str):
     return choice-1, value
 
 
-def start_point(function_type: int):
+def start_point(function_type: int, vector_size=None):
     if function_type == 1:
         print('Please define starting point (by scalar number - 1 | by uniform distribution - 2)')
         choice = getNumericChoice("starting point", [1, 2])
-
         if choice == 1:
             start_point = getNumericScalar("starting point")
-        elif choice == 2:
+    if function_type == 2:
+        print('Please define starting point (by initial vector - 1 | by uniform distribution - 2)')
+        choice = getNumericChoice("starting point", [1, 2])
+        if choice == 1:
             while True:
                 try:
-                    start_point = input(
-                        'Please define range for uniform distribution (i.e.: 1,2): ')
-                    start_point = format_input(start_point, ',')
-                    if all(isinstance(e, (int, float)) for e in start_point) and len(start_point) == 2:
-                        start_point = numpy.asarray(start_point).astype(float)
-                    else:
-                        raise ValueError
-                except ValueError:
-                    print(
-                        'ERROR: Only two numeric numbers allowed! Please try again!\n')
+                    in_text = input(
+                        'Please input initial vector (i.e.: 1,2,3): ')
+                    start_point = format_input(in_text, ',')
+                    start_point = [[i] for i in start_point]
+                    start_point = numpy.asmatrix(start_point).astype(float)
+                    if (start_point.size != vector_size):
+                        raise ValueError(
+                            "Initial vector size is incorrect! Please try again!\n")
+                except ValueError as e:
+                    print(f'ERROR: {e}\n')
                     continue
                 break
-    if function_type == 2:
-        pass  # to do
+    if choice == 2:
+        while True:
+            try:
+                start_point = input(
+                    'Please define range for uniform distribution (i.e.: 1,2): ')
+                start_point = format_input(start_point, ',')
+                if all(isinstance(e, (int, float)) for e in start_point) and len(start_point) == 2:
+                    if vector_size == None:
+                        start_point = numpy.asarray(start_point).astype(float)
+                        start_point = numpy.random.uniform(int(start_point[0]), int(
+                            start_point[1]))  # case with F(x) func for 1 point
+
+                    else:
+                        start_point = numpy.random.uniform(int(start_point[0]), int(
+                            start_point[1]), vector_size)  # case with G(x) func for size of vector points
+                        start_point = numpy.asmatrix([[i] for i in start_point])
+                else:
+                    raise ValueError
+            except ValueError:
+                print(
+                    'ERROR: Only two numeric numbers allowed! Please try again!\n')
+                continue
+            break
     return start_point
 
 

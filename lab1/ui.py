@@ -1,12 +1,11 @@
 import equation
-import methods
 import numpy
 from ui_common import getNumericChoice, getNumericScalar, format_input, stopping_conditions, start_point, is_symmetric, is_positive_definite, print_parameters
-
+from methods import NewtonMethod, GradientDescent
 # To do:
 # add try with another method
-# add error message with quiestion if want to continue
-# add batch
+# add error message with question if want to continue
+# if have time, change starting point in printing parameters to more meaningful
 header_text = '''
 ===============================================================================
 #   Gradient Descent method and Newton's method for function minimalization   #
@@ -53,8 +52,10 @@ def ui():
             try:
                 in_text = input('Please input vector B (i.e.: 1,2,3): ')
                 vector_b = format_input(in_text, ',')
+                vector_b = [[i] for i in vector_b]
                 vector_len = len(vector_b)
-                vector_b = numpy.asarray(vector_b).astype(float)
+                vector_b = numpy.asmatrix(vector_b).astype(
+                    float)
 
                 vector_temp = []
 
@@ -68,14 +69,15 @@ def ui():
                         f"Please input symmetric matrix with dimension {vector_len}x{vector_len}")
                     vector_temp.append(temp_text)
 
-                matrix_a = numpy.asarray(vector_temp).astype(float)
+                matrix_a = numpy.asmatrix(vector_temp).astype(
+                    float)
 
                 if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
                     raise ValueError
                 G_function["b"] = vector_b
                 G_function["a"] = matrix_a
                 print(separation_line)
-                params["start_point"] = start_point(1)
+                params["start_point"] = start_point(2, vector_b.size)
                 print(separation_line)
                 params["stop_cond_type"], params["stop_cond_value"] = stopping_conditions(
                     "G(x)")
@@ -105,16 +107,46 @@ def ui():
 def run_program(params: dict):
     print(separation_line)
     if params["function_type"] == 1:
-        function_to_process = equation.Function_F(params["F_function"]["a"],
-                                                  params["F_function"]["b"],
-                                                  params["F_function"]["c"],
-                                                  params["F_function"]["d"]
-                                                  )
+        function_to_process = equation.Function_F(
+            params["F_function"]["a"], params["F_function"]["b"], params["F_function"]["c"], params["F_function"]["d"])
     if params["function_type"] == 2:
-        function_to_process = equation.Function_G(params["G_function"]["a"],
-                                                  params["G_function"]["b"],
-                                                  params["G_function"]["c"])
+        function_to_process = equation.Function_G(
+            params["G_function"]["a"], params["G_function"]["b"], params["G_function"]["c"])
+    try:
+        if params["batch"] == 1:
+            found_xs = []
+            found_func_values = []
+            for _ in range(params["batch_number"]):
+                if params["method"] == 1:  # grad
+                    x, func_value = GradientDescent.calculate_minimum(function_to_process,
+                                                                      params["start_point"], params["stop_cond_type"], params["stop_cond_value"])
+                if params["method"] == 2:  # newton
+                    x, func_value = NewtonMethod.calculate_minimum(function_to_process,
+                                                                   params["start_point"], params["stop_cond_type"], params["stop_cond_value"])
+                found_xs.append(x)
+                found_func_values.append(func_value)
+            print("=   Results of", params["batch_number"], "iterations.")
+            print(
+                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")
+            print(
+                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")
+            print("=   Obtained solutions for each program execution:")
+            for i in range(len(found_xs)):
+                print(f"\nIteration #{i}: ")
+                print(f"x = {found_xs[i]}")
+                print(f"Function of x = {found_func_values[i]}")
+
+        else:
+            if params["method"] == 1:  # grad
+                print(GradientDescent.calculate_minimum(function_to_process,
+                                                        params["start_point"], params["stop_cond_type"], params["stop_cond_value"]))
+            if params["method"] == 2:  # newton
+                print(NewtonMethod.calculate_minimum(function_to_process,
+                                                     params["start_point"], params["stop_cond_type"], params["stop_cond_value"]))
+    except ValueError as e:
+        print(e)
 
 
+# params["start_point"]
 if __name__ == "__main__":  # for test only
     ui()
