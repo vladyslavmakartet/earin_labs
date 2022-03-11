@@ -1,9 +1,9 @@
 import equation
 import numpy
+import sys
 from ui_common import getNumericChoice, getNumericScalar, format_input, stopping_conditions, start_point, is_symmetric, is_positive_definite, print_parameters, ask_for_batch
 from methods import NewtonMethod, GradientDescent
 # To do:
-# add error message with question if want to continue
 # if have time, change starting point in printing parameters to more meaningful
 header_text = '''
 ===============================================================================
@@ -94,24 +94,28 @@ def ui():
                 continue
             break
 
-
     params["batch"], params["batch_number"] = ask_for_batch()
     print(separation_line)
     print_parameters(params)
     run_program(params)
-    
+
     ans = 'y'
     while ans in yes:
         print(separation_line)
-        ans = input('=   Would you like run another method (y | n):')
+        ans = input('=   Would you like to run another method (y | n):')
         if ans in yes:
             params["batch"], params["batch_number"] = ask_for_batch()
             print("Please select method to use (Gradient: 1, Newton: 2): ")
             params["method"] = getNumericChoice("method", [1, 2])
             print(separation_line)
-            print_parameters(params)            
+            print_parameters(params)
             run_program(params)
             print(separation_line)
+    ans = input('=   Would you like to input new variables (y | n):')
+    if ans in yes:
+        ui()
+    else:
+        sys.exit()
 
 
 def run_program(params: dict):
