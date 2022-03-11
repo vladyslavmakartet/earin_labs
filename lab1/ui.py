@@ -101,7 +101,7 @@ def ui():
     ans = 'y'
     while ans in yes:
         print(separation_line)
-        ans = input('=   Would you like to run another method (y | n):')
+        ans = input('=   Would you like to run another method (y | n): ')
         if ans in yes:
             params["batch"], params["batch_number"] = ask_for_batch()
             print("Please select method to use (Gradient: 1, Newton: 2): ")
@@ -110,7 +110,7 @@ def ui():
             print_parameters(params)
             run_program(params)
             print(separation_line)
-    ans = input('=   Would you like to input new variables (y | n):')
+    ans = input('=   Would you like to input new variables (y | n): ')
     if ans in yes:
         ui()
     else:
@@ -136,13 +136,22 @@ def run_program(params: dict):
                 if params["method"] == 2:  # newton
                     x, func_value = NewtonMethod.calculate_minimum(function_to_process,
                                                                    params["start_point"], params["stop_cond_type"], params["stop_cond_value"])
-                found_xs.append(x)
+                if params["function_type"] == 1:
+                    found_xs.append(x)
+                if params["function_type"] == 2:
+                    found_xs.append(numpy.squeeze(numpy.asarray(x)))
                 found_func_values.append(func_value)
             print("=   Results of", params["batch_number"], "iterations.")
-            print(
-                f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")
-            print(
-                f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")
+            if params["function_type"] == 1:
+                print(
+                    f"=   Mean value: x = {numpy.mean(found_xs)}, function of x = {numpy.mean(found_func_values)}")
+                print(
+                    f"=   Standard deviation: x = {numpy.std(found_xs)}, function of x = {numpy.std(found_func_values)}")
+            if params["function_type"] == 2:
+                print(
+                    f"=   Mean value: x = {numpy.mean(found_xs, axis=0)}, function of x = {numpy.mean(found_func_values)}")
+                print(
+                    f"=   Standard deviation: x = {numpy.std(found_xs, axis=0)}, function of x = {numpy.std(found_func_values)}")
             print("=   Obtained solutions for each program execution:")
             for i in range(len(found_xs)):
                 print(f"\nIteration #{i}: ")
