@@ -1,5 +1,6 @@
 
 
+from random import randint
 from numpy import binary_repr
 
 LIMIT_D = 8
@@ -20,12 +21,18 @@ class BinaryVector:
 
     def from_string(self, x: str) -> "BinaryVector":
         value = int(x, base=2)
-        if value.bit_length() + 1 > self.width_limit:
-            value = -int(x[1:], 2)
+        if value >= 2 ** (self.width_limit - 1):
+            value -= 2 ** self.width_limit
         return BinaryVector(value, width_limit=self.width_limit)
 
     def crossover(self, x: "BinaryVector", crossover_point: int) -> "BinaryVector":
         a = str(self)
         b = str(x)
         result = a[0:crossover_point] + b[crossover_point:]
+        if crossover_point == 0:
+            result = b
         return self.from_string(result)
+
+    def random_crossover(self, x: "BinaryVector") -> "BinaryVector":
+        rand_result = randint(0, self.width_limit)
+        return self.crossover(x, rand_result)
