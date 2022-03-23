@@ -6,13 +6,12 @@ from RouletteWheelSelection import RouletteWheelSelection
 def generate_population(_dim, _int_d, _population_size):
     population = []
     pow = 2**(_int_d)
-    for i in range(_population_size):
+    for _ in range(_population_size):
         x = numpy.random.randint(-pow, pow, _dim)
         x = numpy.asmatrix(x)
         population.append(x.transpose())
-    print(population)
     return population
-    
+
 def main():
     a = BinaryVector(0)
     b = BinaryVector(-1)
@@ -38,9 +37,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-    
-
-
-
-

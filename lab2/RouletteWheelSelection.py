@@ -1,7 +1,8 @@
+from typing import List
 import equation
 import numpy as np
 
-def RouletteWheelSelection(pop, pop_size, equation: equation.Function_G):
+def RouletteWheelSelection(pop: List[np.matrix], pop_size: int, equation: equation.Function_G):
     fit = []
     for chromosome in pop:
         fit.append(equation.get_value(chromosome))
