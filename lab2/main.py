@@ -25,6 +25,7 @@ def main():
     
     pop = generate_population(3, 3, 50)
     print("pop", pop)
+    print("pop len", len(pop))
     a = numpy.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     b = numpy.matrix([[1], [2], [3]])
     c = 2
@@ -34,6 +35,7 @@ def main():
     print("G Value:", example_g.get_value(x))
     temp = RouletteWheelSelection(pop, 50, example_g)
     print("TEMP", temp)
+    print("temp len", len(temp))
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 
 
 from random import randint, random
+from typing import Tuple
 from numpy import binary_repr
 
 LIMIT_D = 8
@@ -28,15 +29,17 @@ class BinaryVector:
             value -= 2 ** self.width_limit # making it negative
         return BinaryVector(value, width_limit=self.width_limit)
 
-    def crossover(self, x: "BinaryVector", crossover_point: int) -> "BinaryVector":
+    def crossover(self, x: "BinaryVector", crossover_point: int) -> Tuple["BinaryVector", "BinaryVector"]:
         a = str(self)
         b = str(x)
         result = a[0:crossover_point] + b[crossover_point:]
+        result2 = b[0:crossover_point] + a[crossover_point:]
         if crossover_point == 0:
             result = b
-        return self.from_string(result)
+            result2 = a
+        return self.from_string(result), self.from_string(result2)
 
-    def random_crossover(self, x: "BinaryVector") -> "BinaryVector":
+    def random_crossover(self, x: "BinaryVector") -> Tuple["BinaryVector", "BinaryVector"]:
         rand_result = randint(0, self.width_limit)
         return self.crossover(x, rand_result)
 
