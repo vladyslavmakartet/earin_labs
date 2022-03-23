@@ -15,7 +15,10 @@ class BadProbabilityValue(Exception):
 class BinaryVector:
 
     def __init__(self, value: int, width_limit: int = LIMIT_D) -> None:
-        if value.bit_length() + 1 > width_limit:
+        max_bit_value = value.bit_length()
+        if value >= 0:
+            max_bit_value += 1
+        if max_bit_value > width_limit:
             raise BinaryVectorOverflow("Representation of a number requires too many bits")
         self.value = value
         self.width_limit = width_limit
@@ -34,6 +37,10 @@ class BinaryVector:
         b = str(x)
         result = a[0:crossover_point] + b[crossover_point:]
         result2 = b[0:crossover_point] + a[crossover_point:]
+        print("R1", result)
+        print("R2", result2)
+        print("Cross", crossover_point)
+        print("len", len(a))
         if crossover_point == 0:
             result = b
             result2 = a

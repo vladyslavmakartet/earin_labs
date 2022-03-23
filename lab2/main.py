@@ -19,13 +19,12 @@ def main():
     a.mutate(0.3)
     print("Mutated", a)
     print("b", b)
-    g = a.random_crossover(b)
-    print(g)
-    
+    g, g2 = a.random_crossover(b)
+    print("G", g, g2)
     
     pop = generate_population(3, 3, 50)
-    print("pop", pop)
-    print("pop len", len(pop))
+    #print("pop", pop)
+    #print("pop len", len(pop))
     a = numpy.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     b = numpy.matrix([[1], [2], [3]])
     c = 2
