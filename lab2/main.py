@@ -1,7 +1,7 @@
 from bin_vec import BinaryVector
 import equation
 import numpy
-from RouletteWheelSelection import RouletteWheelSelection
+from RouletteWheelSelection import RouletteWheelSelection, match_parents
 
 def generate_population(_dim, _int_d, _population_size):
     population = []
@@ -32,10 +32,9 @@ def main():
     x = numpy.matrix([[1], [2], [3]])
 
     example_g = equation.Function_G(a, b, c)
-    print("G Value:", example_g.get_value(x))
     temp = RouletteWheelSelection(pop, 50, example_g)
-    print("TEMP", temp)
-    print("temp len", len(temp))
+    new_childs = match_parents(temp, 2, 0.1)
+    print("Childs", new_childs)
 
 if __name__ == "__main__":
     main()

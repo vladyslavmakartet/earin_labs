@@ -1,6 +1,9 @@
+from random import randint
 from typing import List
 import equation
 import numpy as np
+
+from bin_vec import BinaryVector
 
 def RouletteWheelSelection(pop: List[np.matrix], pop_size: int, equation: equation.Function_G):
     fit = []
@@ -41,3 +44,31 @@ def RouletteWheelSelection(pop: List[np.matrix], pop_size: int, equation: equati
         parents.append(parent)
 
     return parents
+
+def match_parents(parents: List[np.matrix], count: int, mutation_probability: float) -> List[np.matrix]:
+    even = count % 2
+
+    iterations = count // 2 + even # each iteration produces 2 childs from 2 parents
+    childs = []
+    for _ in range(iterations):
+        parent1 = parents[randint(0, len(parents) - 1)]
+        parent2 = parents[randint(0, len(parents) - 1)]
+        new_matrix1 = []
+        new_matrix2 = []
+        for row1, row2 in zip(parent1, parent2):
+            value1 = np.asscalar(row1)
+            value2 = np.asscalar(row2)
+            value1 = BinaryVector(value1)
+            value2 = BinaryVector(value2)
+            value1, value2 = value1.random_crossover(value2)
+            value1.mutate(mutation_probability)
+            value2.mutate(mutation_probability)
+            new_matrix1.append(value1.value)
+            new_matrix2.append(value2.value)
+        new_matrix1 = np.asmatrix(new_matrix1)
+        new_matrix2 = np.asmatrix(new_matrix2)
+        childs.append(new_matrix1.transpose())
+        childs.append(new_matrix2.transpose())
+    if even == 1:
+        childs.pop() # if not even then we have one childs too much
+    return childs
