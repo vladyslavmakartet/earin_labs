@@ -1,16 +1,7 @@
 from bin_vec import BinaryVector
 import equation
 import numpy
-from RouletteWheelSelection import RouletteWheelSelection, match_parents
-
-def generate_population(_dim, _int_d, _population_size):
-    population = []
-    pow = 2**(_int_d)
-    for _ in range(_population_size):
-        x = numpy.random.randint(-pow, pow, _dim)
-        x = numpy.asmatrix(x)
-        population.append(x.transpose())
-    return population
+from RouletteWheelSelection import roulette_wheel_selection, match_parents, generate_population
 
 def main():
     a = BinaryVector(0)
@@ -31,8 +22,8 @@ def main():
     x = numpy.matrix([[1], [2], [3]])
 
     example_g = equation.Function_G(a, b, c)
-    temp = RouletteWheelSelection(pop, 50, example_g)
-    new_childs = match_parents(temp, 2, 0.1)
+    temp = roulette_wheel_selection(pop, 50, example_g)
+    new_childs = match_parents(pop, temp, 6, 0.1, 0.1)
     print("Childs", new_childs)
 
 if __name__ == "__main__":

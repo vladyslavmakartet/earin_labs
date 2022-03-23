@@ -1,11 +1,21 @@
-from random import randint
+from random import randint, random
 from typing import List
 import equation
 import numpy as np
 
 from bin_vec import BinaryVector
+from equation import Function_G
 
-def RouletteWheelSelection(pop: List[np.matrix], pop_size: int, equation: equation.Function_G):
+def generate_population(_dim, _int_d, _population_size):
+    population = []
+    pow = 2**(_int_d)
+    for _ in range(_population_size):
+        x = np.random.randint(-pow, pow, _dim)
+        x = np.asmatrix(x)
+        population.append(x.transpose())
+    return population
+
+def roulette_wheel_selection(pop: List[np.matrix], pop_size: int, equation: equation.Function_G):
     fit = []
     for chromosome in pop:
         fit.append(equation.get_value(chromosome))
@@ -45,16 +55,17 @@ def RouletteWheelSelection(pop: List[np.matrix], pop_size: int, equation: equati
 
     return parents
 
-def match_parents(parents: List[np.matrix], count: int, mutation_probability: float) -> List[np.matrix]:
-    even = count % 2
-
-    iterations = count // 2 + even # each iteration produces 2 childs from 2 parents
+def match_parents(current_population: List[np.matrix], parents: List[np.matrix], count: int, mutation_probability: float, crossover_probability: float) -> List[np.matrix]:
+    iterations = count // 2 # each iteration produces 2 childs from 2 parents
     childs = []
     for _ in range(iterations):
+        crossover = random() < crossover_probability
         parent1 = parents[randint(0, len(parents) - 1)]
         parent2 = parents[randint(0, len(parents) - 1)]
         new_matrix1 = []
         new_matrix2 = []
+        if not crossover:
+            continue
         for row1, row2 in zip(parent1, parent2):
             value1 = np.asscalar(row1)
             value2 = np.asscalar(row2)
@@ -69,6 +80,29 @@ def match_parents(parents: List[np.matrix], count: int, mutation_probability: fl
         new_matrix2 = np.asmatrix(new_matrix2)
         childs.append(new_matrix1.transpose())
         childs.append(new_matrix2.transpose())
-    if even == 1:
-        childs.pop() # if not even then we have one childs too much
-    return childs
+    for parent in current_population:
+        new_matrix = []
+        for row in parent:
+            value = np.asscalar(row)
+            value = BinaryVector(value)
+            value.mutate(mutation_probability)
+            new_matrix.append(value.value)
+        new_matrix = np.asmatrix(new_matrix)
+        parent = new_matrix.transpose()
+    new_population = [*childs, *current_population] # parents at the end and we drop end, so FIFO
+    new_population = new_population[0:count] # we drop the oldest parents
+    return new_population
+
+def run_algorithm(
+        dimension: int,
+        population_size: int,
+        d: int,
+        mutation_probability: float,
+        crossover_probability: float,
+        iterations: int,
+        function_g: Function_G):
+    population = generate_population(dimension, d, population_size)
+    for _ in range(iterations):
+        roulette_result = roulette_wheel_selection(population, population_size, function_g)
+        population = match_parents(population, roulette_result, population_size, mutation_probability, crossover_probability)
+    return population
