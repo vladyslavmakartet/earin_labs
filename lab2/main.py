@@ -14,8 +14,10 @@ def generate_population(_dim, _int_d, _population_size):
 def main():
     a = BinaryVector(0)
     b = BinaryVector(-1)
-    print(a)
-    print(b)
+    print("a", a)
+    a.mutate(0.3)
+    print("Mutated", a)
+    print("b", b)
     g = a.random_crossover(b)
     print(g)
     
