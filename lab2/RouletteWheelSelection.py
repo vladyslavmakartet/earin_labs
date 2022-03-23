@@ -2,17 +2,14 @@ import equation
 import numpy as np
 
 def RouletteWheelSelection(pop, pop_size, equation: equation.Function_G):
-    population = np.asarray(pop)
     fit = []
-    for chromosome in population:
-        temp = [[i] for i in chromosome]
-        temp = np.asmatrix(temp) # transform to format of our class
-        fit.append(equation.get_value(temp))
-        
+    for chromosome in pop:
+        fit.append(equation.get_value(chromosome))
+
     max_fit = max(fit)
     min_fit = min(fit)
     parents = []
-    
+
     # Rescale to [0, 1]
     fit_rescale = []
     sum = 0
@@ -22,7 +19,7 @@ def RouletteWheelSelection(pop, pop_size, equation: equation.Function_G):
         else:
             res_val = (fit[f] - min_fit) / (max_fit - min_fit)
         sum += res_val
-        fit_rescale.append((res_val, population[f]))
+        fit_rescale.append((res_val, pop[f]))
         
     wheel = []
     prev = 0
