@@ -1,3 +1,7 @@
+# to do:
+# fix for d?
+# check variables
+
 from ui_common import getNumericScalar, format_input, is_symmetric, is_positive_definite, print_parameters
 import numpy as np
 import sys
@@ -16,7 +20,8 @@ yes = ['y', 'yes', 'Y', 'Yes']
 # function_type = '''
 # F(x) = c+(b^T)*x+(x^T)*A*x (c - scalar number, b - vector of n numbers, A - 𝑛 𝑥 𝑛 matrix, x - vector)
 # '''
- 
+
+
 def ui():
     params = {}  # dict of all inputs
     print(chr(27) + "[2J")  # clear output
@@ -46,21 +51,21 @@ def ui():
                 float)
             if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
                 raise ValueError
-            
+
             params["b"] = vector_b
             params["a"] = matrix_a
             print("\n" + separation_line)
 
             params["d"] = getNumericScalar("d", "int")
-            params["dimensionality"] = getNumericScalar("dimensionality", "int")
-            params["population_size"] = getNumericScalar("population size", "int")
-            params["crossover_proba"] = getNumericScalar("crossover probability")
+            params["dimensionality"] = getNumericScalar(
+                "dimensionality", "int")
+            params["population_size"] = getNumericScalar(
+                "population size", "int")
+            params["crossover_proba"] = getNumericScalar(
+                "crossover probability")
             params["mutation_proba"] = getNumericScalar("mutation probability")
             params["iter_num"] = getNumericScalar("number of iteration", "int")
-            
-        
-        
-        
+
         except AssertionError as e:
             print(f"ERROR: {e}\n")
             continue
@@ -73,7 +78,6 @@ def ui():
             continue
         break
 
-
     print(separation_line)
     print_parameters(params)
     run_program(params)
@@ -84,18 +88,33 @@ def ui():
     else:
         sys.exit()
 
+
 def run_program(params: dict):
     print(separation_line)
-    
-    function_to_process = equation.Function_G(params["a"],params["b"],params["c"])
-    algorithm.run_algorithm(params["dimensionality"],
-                                         params["population_size"],
-                                         params["d"],
-                                         params["mutation_proba"],
-                                         params["crossover_proba"],
-                                         params["iter_num"],
-                                         function_to_process)    
-    
-        
+
+    function_to_process = equation.Function_G(
+        params["a"], params["b"], params["c"])
+    last_population = algorithm.run_algorithm(params["dimensionality"],
+                                              params["population_size"],
+                                              params["d"],
+                                              params["mutation_proba"],
+                                              params["crossover_proba"],
+                                              params["iter_num"],
+                                              function_to_process)
+
+    results = {}
+    for i in range(len(last_population)):
+        results[i] = function_to_process.get_value(last_population[i])
+    print("Output population:")
+    for key, value in results.items():
+        # transposed for more compact output
+        print(
+            f"= Member #{key}: {last_population[key].transpose()}.\t Target function value: {value}")
+
+    print("\nMAX of the function: ")
+    print(
+        f"= Member: {last_population[max(results, key=results.get)].transpose()}.\t Target function value: {results[max(results, key=results.get)]}")
+
+
 if __name__ == "__main__":
     ui()
