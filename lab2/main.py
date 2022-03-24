@@ -4,7 +4,7 @@ import numpy
 from algorithm import roulette_wheel_selection, match_parents, generate_population, run_algorithm
 
 def main():
-    a = BinaryVector(0, 8)
+    a = BinaryVector(127, 8)
     b = BinaryVector(-1, 8)
     print("a", a)
     a.mutate(0.3)
@@ -13,7 +13,7 @@ def main():
     g, g2 = a.random_crossover(b)
     print("G", g, g2)
     
-    pop = generate_population(3, 3, 50)
+    pop = generate_population(3, 8, 50)
     #print("pop", pop)
     #print("pop len", len(pop))
     a = numpy.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])

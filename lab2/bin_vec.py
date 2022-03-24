@@ -18,7 +18,7 @@ class BinaryVector:
         if value >= 0:
             max_bit_value += 1
         if max_bit_value > width_limit:
-            raise BinaryVectorOverflow("Representation of a number requires too many bits")
+            raise BinaryVectorOverflow(f"Representation of a number {value} requires too many bits - max {width_limit} bits")
         self.value = value
         self.width_limit = width_limit
 

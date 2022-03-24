@@ -8,10 +8,11 @@ from equation import Function_G
 
 def generate_population(dim, d, population_size):
     population = []
-    pow = 2**(d-1)
+    print("d", d)
+    power = pow(2, d-1)
+    print("power", power)
     for _ in range(population_size):
-        x = np.random.randint(-pow, pow, dim)
-        print(x)
+        x = np.random.randint(-power, power-1, dim)
         x = np.asmatrix(x)
         population.append(x.transpose())
     return population
