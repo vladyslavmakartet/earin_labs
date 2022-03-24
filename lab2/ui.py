@@ -2,7 +2,7 @@ from ui_common import getNumericScalar, format_input, is_symmetric, is_positive_
 import numpy as np
 import sys
 import equation
-import RouletteWheelSelection
+import algorithm
 
 header_text = '''
 ===============================================================================
@@ -88,7 +88,7 @@ def run_program(params: dict):
     print(separation_line)
     
     function_to_process = equation.Function_G(params["a"],params["b"],params["c"])
-    RouletteWheelSelection.run_algorithm(params["dimensionality"],
+    algorithm.run_algorithm(params["dimensionality"],
                                          params["population_size"],
                                          params["d"],
                                          params["mutation_proba"],

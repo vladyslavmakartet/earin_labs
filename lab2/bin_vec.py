@@ -4,7 +4,6 @@ from random import randint, random
 from typing import Tuple
 from numpy import binary_repr
 
-LIMIT_D = 8
 
 class BinaryVectorOverflow(Exception):
     pass
@@ -14,7 +13,7 @@ class BadProbabilityValue(Exception):
 
 class BinaryVector:
 
-    def __init__(self, value: int, width_limit: int = LIMIT_D) -> None:
+    def __init__(self, value: int, width_limit: int) -> None:
         max_bit_value = value.bit_length()
         if value >= 0:
             max_bit_value += 1

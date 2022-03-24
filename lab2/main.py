@@ -1,11 +1,11 @@
 from bin_vec import BinaryVector
 import equation
 import numpy
-from RouletteWheelSelection import roulette_wheel_selection, match_parents, generate_population
+from algorithm import roulette_wheel_selection, match_parents, generate_population, run_algorithm
 
 def main():
-    a = BinaryVector(0)
-    b = BinaryVector(-1)
+    a = BinaryVector(0, 8)
+    b = BinaryVector(-1, 8)
     print("a", a)
     a.mutate(0.3)
     print("Mutated", a)
@@ -23,8 +23,10 @@ def main():
 
     example_g = equation.Function_G(a, b, c)
     temp = roulette_wheel_selection(pop, 50, example_g)
-    new_childs = match_parents(pop, temp, 6, 0.1, 0.1)
+    new_childs = match_parents(pop, temp, 6, 0.1, 0.1, 8)
     print("Childs", new_childs)
+    temp2 = run_algorithm(3, 10, 8, 0.1, 0.2, 10, example_g)
+    print("temp2", temp2)
 
 if __name__ == "__main__":
     main()
