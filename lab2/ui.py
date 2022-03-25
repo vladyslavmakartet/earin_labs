@@ -24,11 +24,15 @@ def ui():
     print(header_text)
     while True:
         try:
-            params["c"] = getNumericScalar("c")
+            params["dimensionality"] = getNumericScalar(
+                "dimensionality", "int", onlyPositive=True)
             in_text = input('Please input vector B (i.e.: 1,2,3): ')
             vector_b = format_input(in_text, ',')
             vector_b = [[i] for i in vector_b]
             vector_len = len(vector_b)
+            if vector_len != params["dimensionality"]:
+                raise ValueError(
+                    "Provided dimensionality and vector lenght are not the same! Please input correct parameters and try again.")
             vector_b = np.asmatrix(vector_b).astype(
                 float)
             vector_temp = []
@@ -48,20 +52,19 @@ def ui():
             if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
                 raise ValueError
 
+            params["c"] = getNumericScalar("c")
             params["b"] = vector_b
             params["a"] = matrix_a
             print("\n" + separation_line)
 
             params["d"] = getNumericScalar("d", "int", onlyPositive=True)
             params["d"] += 1
-            params["dimensionality"] = getNumericScalar(
-                "dimensionality", "int", onlyPositive=True)
             params["population_size"] = getNumericScalar(
                 "population size", "int", onlyPositive=True)
             params["crossover_proba"] = getNumericScalar(
-                "crossover probability in the range 0 to 1","in range 0 to 1", onlyPositive=True)
+                "crossover probability in the range 0 to 1", "in range 0 to 1", onlyPositive=True)
             params["mutation_proba"] = getNumericScalar(
-                "mutation probability in the range 0 to 1","in range 0 to 1", onlyPositive=True)
+                "mutation probability in the range 0 to 1", "in range 0 to 1", onlyPositive=True)
             params["iter_num"] = getNumericScalar(
                 "number of iteration", "int", onlyPositive=True)
 
