@@ -3,6 +3,7 @@
 from random import randint, random
 from typing import Tuple
 from numpy import binary_repr
+from bitstring import BitArray
 
 
 class BinaryVectorOverflow(Exception):
@@ -26,23 +27,20 @@ class BinaryVector:
         return binary_repr(self.value, self.width_limit)
 
     def from_string(self, x: str) -> "BinaryVector":
-        value = int(x, base=2)
-        if value >= 2 ** (self.width_limit - 1): # it will be 1... so it will be ngative in U2
-            value -= 2 ** self.width_limit # making it negative
-        return BinaryVector(value, width_limit=self.width_limit)
+        b = BitArray(bin=x)
+        return BinaryVector(b.int, width_limit=self.width_limit)
 
     def crossover(self, x: "BinaryVector", crossover_point: int) -> Tuple["BinaryVector", "BinaryVector"]:
         a = str(self)
         b = str(x)
         result = a[0:crossover_point] + b[crossover_point:]
         result2 = b[0:crossover_point] + a[crossover_point:]
-        print("R1", result)
-        print("R2", result2)
-        print("Cross", crossover_point)
-        print("len", len(a))
         if crossover_point == 0:
             result = b
             result2 = a
+        elif crossover_point == self.width_limit:
+            result = a
+            result2 = b
         return self.from_string(result), self.from_string(result2)
 
     def random_crossover(self, x: "BinaryVector") -> Tuple["BinaryVector", "BinaryVector"]:
@@ -52,8 +50,11 @@ class BinaryVector:
     def mutate(self, probability: float) -> None:
         if probability < 0 or probability > 1:
             raise BadProbabilityValue("Given probability is out of 0 to 1 range")
-        value = self.value
+        value = self.__str__()
+        value = list(value) # we will mutate on string, for some reason while changing first bit python doesn't make number negative
         for i in range(self.width_limit):
             if probability > random():
-                value ^= 1 << i
-        self.value = value
+                value[i] = "0" if value[i] == "1" else "1"
+        value = "".join(value)
+        newValue = self.from_string(value)
+        self.value = newValue.value
