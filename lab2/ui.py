@@ -1,7 +1,3 @@
-# to do:
-# fix for d?
-# check variables
-
 from ui_common import getNumericScalar, format_input, is_symmetric, is_positive_definite, print_parameters
 import numpy as np
 import sys
@@ -57,6 +53,7 @@ def ui():
             print("\n" + separation_line)
 
             params["d"] = getNumericScalar("d", "int")
+            params["d"] += 1
             params["dimensionality"] = getNumericScalar(
                 "dimensionality", "int")
             params["population_size"] = getNumericScalar(

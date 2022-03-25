@@ -39,7 +39,7 @@ def print_parameters(params: dict):
     text_with_variables = f"""    scalar c: {params['c']}
         vector b: {params['b']}
         matrix A:\n {params['a']}
-        int d: {params["d"]}
+        int d: {params["d"]-1}
         problem dimensionality: {params["dimensionality"]}
         population size: {params["population_size"]}
         crossover probability: {params["crossover_proba"]}
