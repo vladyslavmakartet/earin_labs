@@ -52,16 +52,18 @@ def ui():
             params["a"] = matrix_a
             print("\n" + separation_line)
 
-            params["d"] = getNumericScalar("d", "int")
+            params["d"] = getNumericScalar("d", "int", onlyPositive=True)
             params["d"] += 1
             params["dimensionality"] = getNumericScalar(
-                "dimensionality", "int")
+                "dimensionality", "int", onlyPositive=True)
             params["population_size"] = getNumericScalar(
-                "population size", "int")
+                "population size", "int", onlyPositive=True)
             params["crossover_proba"] = getNumericScalar(
-                "crossover probability")
-            params["mutation_proba"] = getNumericScalar("mutation probability")
-            params["iter_num"] = getNumericScalar("number of iteration", "int")
+                "crossover probability in the range 0 to 1","in range 0 to 1", onlyPositive=True)
+            params["mutation_proba"] = getNumericScalar(
+                "mutation probability in the range 0 to 1","in range 0 to 1", onlyPositive=True)
+            params["iter_num"] = getNumericScalar(
+                "number of iteration", "int", onlyPositive=True)
 
         except AssertionError as e:
             print(f"ERROR: {e}\n")

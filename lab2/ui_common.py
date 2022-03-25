@@ -9,6 +9,10 @@ def getNumericScalar(coef: str, type_="numeric", onlyPositive=False) -> float:
                 if onlyPositive and number < 0:
                     number = 0
                     print("Value must be positive. Your input was set to zero.\n")
+            elif type_ == "in range 0 to 1":
+                number = float(input(f'Please enter {coef} ({type_}): '))
+                if number > 1 or number < 0:
+                    raise ValueError
             else:
                 number = float(input(f'Please enter {coef} ({type_}): '))
 
