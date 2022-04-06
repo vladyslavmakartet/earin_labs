@@ -99,9 +99,10 @@ class Game:
     def __init__(self, screen, player=2):
         self.screen = screen
         self.board = Board(self.screen)
-        self.player = player  # initial player to mark the square, player1 = cross, player2 = circle
+        self.player = 2  # initial player to mark the square, player1 = cross, player2 = circle
+        self.initial_player = player
         self.running = True
-        self.ai = AI()
+        self.ai = AI(player)
         self.draw_lines()
 
     def draw_lines(self):
@@ -149,7 +150,7 @@ class Game:
         return self.board.final_state(show=True) != 0 or self.board.isFull()
 
     def reset(self):
-        self.__init__(self.screen, self.player)
+        self.__init__(self.screen, self.initial_player)
 
 
 def main():
@@ -173,12 +174,12 @@ def main():
                     board = game.board
                     ai = game.ai
                 if event.key == pygame.K_1:
-                    game.player = 1
+                    game.initial_player = 1
                     game.reset()
                     board = game.board
                     ai = game.ai
                 if event.key == pygame.K_2:
-                    game.player = 2
+                    game.initial_player = 2
                     game.reset()
                     board = game.board
                     ai = game.ai
