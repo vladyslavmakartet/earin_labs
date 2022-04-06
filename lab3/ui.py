@@ -96,11 +96,10 @@ class Board:
         return self.marked_squares == 0
 
 class Game:
-    def __init__(self, screen, gamemode='ai'):
+    def __init__(self, screen, player=2):
         self.screen = screen
         self.board = Board(self.screen)
-        self.player = 2  # initial player to mark the square, player1 = cross, player2 = circle
-        self.gamemode = gamemode  # gamemode to play, default pvp
+        self.player = player  # initial player to mark the square, player1 = cross, player2 = circle
         self.running = True
         self.ai = AI()
         self.draw_lines()
@@ -134,7 +133,7 @@ class Game:
             pygame.draw.line(self.screen, CROSS_COLOR, start_asc,
                              end_asc, CROSS_WIDTH)
         # draw cirle
-        if self.player == 2:
+        elif self.player == 2:
             center = (col * SQSIZE + SQSIZE // 2, row * SQSIZE + SQSIZE // 2)
             pygame.draw.circle(self.screen, CIRC_COLOR, center, RADIUS, CIRC_WIDTH)
 
@@ -146,14 +145,11 @@ class Game:
     def next_turn(self):
         self.player = self.player % 2 + 1
 
-    def change_gamemode(self):
-        self.gamemode = 'ai' if self.gamemode == 'pvp' else 'pvp'
-
     def isover(self):
         return self.board.final_state(show=True) != 0 or self.board.isFull()
 
     def reset(self):
-        self.__init__(self.screen)
+        self.__init__(self.screen, self.player)
 
 
 def main():
@@ -171,17 +167,18 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                # g-gamemode
-                if event.key == pygame.K_g:
-                    game.change_gamemode()
-                # 0-random ai
-                if event.key == pygame.K_0:
-                    ai.level = 0
-                # 1-minimaxAB ai
-                if event.key == pygame.K_1:
-                    ai.level = 1
                 # r-restart
                 if event.key == pygame.K_r:
+                    game.reset()
+                    board = game.board
+                    ai = game.ai
+                if event.key == pygame.K_1:
+                    game.player = 1
+                    game.reset()
+                    board = game.board
+                    ai = game.ai
+                if event.key == pygame.K_2:
+                    game.player = 2
                     game.reset()
                     board = game.board
                     ai = game.ai
@@ -199,21 +196,15 @@ def main():
                     if game.isover():
                         game.running = False
 
-        if game.gamemode == "ai" and game.player == ai.player and game.running:
+        if game.player == ai.player and game.running:
 
             # update the screen
             pygame.display.update()
 
             # ai move
-            if False and board.isEmpty():
-                # if it is the first move, make it random
-                row = random.choice([0, 1, 2])
-                col = random.choice([0, 1, 2])
-                game.make_move(row, col)
-            else:
-                row, col = ai.eval(board)
-                game.make_move(row, col)
-                # print(board.squares)
+            row, col = ai.eval(board)
+            game.make_move(row, col)
+            # print(board.squares)
 
             if game.isover():
                 game.running = False

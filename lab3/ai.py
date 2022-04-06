@@ -3,19 +3,9 @@ import random
 from math import inf
 
 class AI:
-    # random ai: level = 0, minimaxAB ai: level = 1
-    def __init__(self, level=1, player=2):
-        self.level = level
+    def __init__(self, player=2):
         self.player = player
         self.count = 0
-
-    # --- RANDOM ---
-
-    def rnd(self, board):
-        empty_sqrs = board.get_empty_squares()
-        idx = random.randrange(0, len(empty_sqrs))
-
-        return empty_sqrs[idx]  # (row, col)
 
     # --- MINIMAX ---
 
@@ -28,7 +18,7 @@ class AI:
         if case == 1:
             return 1, None  # eval, move
 
-        # player 2 wins (ai wins)
+        # player 2 wins
         if case == 2:
             return -1, None  # eval, move
 
@@ -36,49 +26,39 @@ class AI:
         elif board.isFull():
             return 0, None  # eval, move
 
+        best_move = None
+        empty_sqrs = board.get_empty_squares()
+        player = 2
+        next_move_max = True
         if maximizing:
-            best_move = None
-            empty_sqrs = board.get_empty_squares()
+            player = 1
+            next_move_max = False
 
-            for (row, col) in empty_sqrs:
-                temp_board = copy.deepcopy(board)
-                temp_board.mark_square(row, col, 1)
-                eval = self.minimaxAB(temp_board, alpha, beta, False)[0]
-                if eval > alpha:
-                    alpha = eval
-                    best_move = (row, col)
+        for (row, col) in empty_sqrs:
+            temp_board = copy.deepcopy(board)
+            temp_board.mark_square(row, col, player)
+            eval = self.minimaxAB(temp_board, alpha, beta, next_move_max)[0]
+            if maximizing and eval > alpha:
+                alpha = eval
+                best_move = (row, col)
+            elif not maximizing and eval < beta:
+                beta = eval
+                best_move = (row, col)
 
-                if alpha >= beta:
-                    break
+            if alpha >= beta:
+                break
 
+        if maximizing:
             return alpha, best_move
-
-        elif not maximizing:
-            best_move = None
-            empty_sqrs = board.get_empty_squares()
-
-            for (row, col) in empty_sqrs:
-                temp_board = copy.deepcopy(board)
-                temp_board.mark_square(row, col, self.player)
-                eval = self.minimaxAB(temp_board, alpha, beta, True)[0]
-                if eval < beta:
-                    beta = eval
-                    best_move = (row, col)
-
-                if alpha >= beta:
-                    break
+        else:
             return beta, best_move
 
     # --- MAIN EVAL ---
 
     def eval(self, main_board):
-        if self.level == 0:
-            # random choice
-            eval = 'random'
-            move = self.rnd(main_board)
-        else:
-            # minimaxAB algo choice
-            eval, move = self.minimaxAB(main_board, -inf, inf, False)
+        # minimaxAB algo choice
+        maximize = self.player == 1
+        eval, move = self.minimaxAB(main_board, -inf, inf, maximize)
         # eval = 1, player wins. eval = -1, algorithm wins. eval = 0, draw
         print(
             f'Algorithm has chosen the square in pos {move} with an eval of: {eval}. Num of iterations: {self.count}')
