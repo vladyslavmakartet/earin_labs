@@ -8,20 +8,18 @@ class AI:
     def minimaxAB(self, board, alpha, beta, maximizing):
         # minmax algorithm with alpha beta pruning
 
-        # terminal case
-        case = board.final_state()
-        # player 1 wins
-        if case == 1:
-            return 1, None  # eval, move
-        # player 2 wins
-        elif case == 2:
-            return -1, None  # eval, move
-        # draw
-        elif board.isFull():
-            return 0, None  # eval, move
+        case = board.final_state() # checks if any player won
+        if case == 1: # player 1 wins
+            return 1, None
+        elif case == 2: # player 2 wins
+            return -1, None
+        elif board.isFull(): # draw
+            return 0, None
 
+        # game did not ended yet
         best_move = None
         empty_sqrs = board.get_empty_squares()
+        # presetting values instead of using else
         player = 2
         next_move_max = True
         if maximizing:
@@ -38,8 +36,7 @@ class AI:
             elif not maximizing and eval < beta:
                 beta = eval
                 best_move = (row, col)
-
-            if alpha >= beta:
+            if alpha >= beta: # alpha beta pruning break condition
                 break
 
         if maximizing:
