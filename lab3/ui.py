@@ -10,7 +10,7 @@ from game import Game
 
 
 def main():
-    # PYGAME SETUP
+    # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('TIC TAC TOE GAME')
@@ -24,17 +24,17 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                # r-restart
+                # restart
                 if event.key == pygame.K_r:
                     game.reset()
                     board = game.board
                     ai = game.ai
-                if event.key == pygame.K_1:
+                elif event.key == pygame.K_1:
                     game.initial_player = 1
                     game.reset()
                     board = game.board
                     ai = game.ai
-                if event.key == pygame.K_2:
+                elif event.key == pygame.K_2:
                     game.initial_player = 2
                     game.reset()
                     board = game.board
@@ -48,7 +48,6 @@ def main():
                 # huuman move
                 if board.empty_square(row, col) and game.running:
                     game.make_move(row, col)
-                    # print(board.squares)
 
                     if game.isover():
                         game.running = False
@@ -61,7 +60,6 @@ def main():
             # ai move
             row, col = ai.eval(board)
             game.make_move(row, col)
-            # print(board.squares)
 
             if game.isover():
                 game.running = False

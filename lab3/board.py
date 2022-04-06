@@ -10,7 +10,6 @@ class Board:
         self.empty_squares = self.squares  # list of empty squares
         self.marked_squares = 0  # number of marked squares
         self.screen = screen
-        # print(self.squares)
 
     def __deepcopy__(self, memo):
         copy_board = Board(self.screen)
