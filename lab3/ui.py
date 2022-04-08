@@ -51,6 +51,7 @@ def main():
 
                     if game.isover():
                         game.running = False
+                        print("Game over")
 
         if game.player == ai.player and game.running:
 
@@ -63,5 +64,6 @@ def main():
 
             if game.isover():
                 game.running = False
+                print("Game is over")
 
         pygame.display.update()
