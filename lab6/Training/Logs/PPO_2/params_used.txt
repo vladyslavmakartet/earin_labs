@@ -1,6 +1,0 @@
-Params used:
-episodes=20
-total_timesteps=400000
-n_eval_episodes=20
-algorithm=PPO
-policy="CnnPolicy"
