@@ -1,0 +1,219 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 70%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 70%;
+            height: 800px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#1f456e", "id": "itching", "label": "itching", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "nodal_skin_eruptions", "label": "nodal_skin_eruptions", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "continuous_feel_of_urine", "label": "continuous_feel_of_urine", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "bladder_discomfort", "label": "bladder_discomfort", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "skin_rash", "label": "skin_rash", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "scurring", "label": "scurring", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "red_sore_around_nose", "label": "red_sore_around_nose", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "blackheads", "label": "blackheads", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "blister", "label": "blister", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "continuous_sneezing", "label": "continuous_sneezing", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "watering_from_eyes", "label": "watering_from_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "shivering", "label": "shivering", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "chills", "label": "chills", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "pain_in_anal_region", "label": "pain_in_anal_region", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "pain_during_bowel_movements", "label": "pain_during_bowel_movements", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "bloody_stool", "label": "bloody_stool", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "joint_pain", "label": "joint_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "hip_joint_pain", "label": "hip_joint_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "skin_peeling", "label": "skin_peeling", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "painful_walking", "label": "painful_walking", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "small_dents_in_nails", "label": "small_dents_in_nails", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "inflammatory_nails", "label": "inflammatory_nails", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "stomach_pain", "label": "stomach_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "ulcers_on_tongue", "label": "ulcers_on_tongue", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "acidity", "label": "acidity", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "muscle_wasting", "label": "muscle_wasting", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "patches_in_throat", "label": "patches_in_throat", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "vomiting", "label": "vomiting", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "unsteadiness", "label": "unsteadiness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "burning_micturition", "label": "burning_micturition", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "fatigue", "label": "fatigue", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "mood_swings", "label": "mood_swings", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "abnormal_menstruation", "label": "abnormal_menstruation", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "enlarged_thyroid", "label": "enlarged_thyroid", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "rusty_sputum", "label": "rusty_sputum", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "cough", "label": "cough", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "high_fever", "label": "high_fever", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "sunken_eyes", "label": "sunken_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "dehydration", "label": "dehydration", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "indigestion", "label": "indigestion", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "passage_of_gases", "label": "passage_of_gases", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "headache", "label": "headache", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "pain_behind_the_eyes", "label": "pain_behind_the_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "altered_sensorium", "label": "altered_sensorium", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "yellowish_skin", "label": "yellowish_skin", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "history_of_alcohol_consumption", "label": "history_of_alcohol_consumption", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swelling_of_stomach", "label": "swelling_of_stomach", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "fluid_overload.1", "label": "fluid_overload.1", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "nausea", "label": "nausea", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "belly_pain", "label": "belly_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "loss_of_appetite", "label": "loss_of_appetite", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "prognosis", "label": "prognosis", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "spotting_ urination", "label": "spotting_ urination", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "weight_loss", "label": "weight_loss", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "restlessness", "label": "restlessness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "lethargy", "label": "lethargy", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "breathlessness", "label": "breathlessness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "sweating", "label": "sweating", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "dark_urine", "label": "dark_urine", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "back_pain", "label": "back_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "constipation", "label": "constipation", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "abdominal_pain", "label": "abdominal_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "diarrhoea", "label": "diarrhoea", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "mild_fever", "label": "mild_fever", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "yellowing_of_eyes", "label": "yellowing_of_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swelled_lymph_nodes", "label": "swelled_lymph_nodes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "malaise", "label": "malaise", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "blurred_and_distorted_vision", "label": "blurred_and_distorted_vision", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "phlegm", "label": "phlegm", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "throat_irritation", "label": "throat_irritation", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "chest_pain", "label": "chest_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "fast_heart_rate", "label": "fast_heart_rate", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "irritation_in_anus", "label": "irritation_in_anus", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "neck_pain", "label": "neck_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "dizziness", "label": "dizziness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "obesity", "label": "obesity", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "excessive_hunger", "label": "excessive_hunger", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "extra_marital_contacts", "label": "extra_marital_contacts", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "knee_pain", "label": "knee_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "muscle_weakness", "label": "muscle_weakness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "stiff_neck", "label": "stiff_neck", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swelling_joints", "label": "swelling_joints", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "movement_stiffness", "label": "movement_stiffness", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "spinning_movements", "label": "spinning_movements", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "loss_of_balance", "label": "loss_of_balance", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "weakness_of_one_body_side", "label": "weakness_of_one_body_side", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "foul_smell_of urine", "label": "foul_smell_of urine", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "internal_itching", "label": "internal_itching", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "toxic_look_(typhos)", "label": "toxic_look_(typhos)", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "depression", "label": "depression", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "irritability", "label": "irritability", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "muscle_pain", "label": "muscle_pain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "red_spots_over_body", "label": "red_spots_over_body", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "dischromic _patches", "label": "dischromic _patches", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "polyuria", "label": "polyuria", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "family_history", "label": "family_history", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "mucoid_sputum", "label": "mucoid_sputum", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "lack_of_concentration", "label": "lack_of_concentration", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "visual_disturbances", "label": "visual_disturbances", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "receiving_unsterile_injections", "label": "receiving_unsterile_injections", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "stomach_bleeding", "label": "stomach_bleeding", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "distention_of_abdomen", "label": "distention_of_abdomen", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "blood_in_sputum", "label": "blood_in_sputum", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "palpitations", "label": "palpitations", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "pus_filled_pimples", "label": "pus_filled_pimples", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "silver_like_dusting", "label": "silver_like_dusting", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "yellow_crust_ooze", "label": "yellow_crust_ooze", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "weakness_in_limbs", "label": "weakness_in_limbs", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "runny_nose", "label": "runny_nose", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "redness_of_eyes", "label": "redness_of_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "sinus_pressure", "label": "sinus_pressure", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "congestion", "label": "congestion", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "loss_of_smell", "label": "loss_of_smell", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "cramps", "label": "cramps", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swollen_legs", "label": "swollen_legs", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "prominent_veins_on_calf", "label": "prominent_veins_on_calf", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "bruising", "label": "bruising", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swollen_blood_vessels", "label": "swollen_blood_vessels", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "swollen_extremeties", "label": "swollen_extremeties", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "brittle_nails", "label": "brittle_nails", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "weight_gain", "label": "weight_gain", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "cold_hands_and_feets", "label": "cold_hands_and_feets", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "puffy_face_and_eyes", "label": "puffy_face_and_eyes", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "slurred_speech", "label": "slurred_speech", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "anxiety", "label": "anxiety", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "drying_and_tingling_lips", "label": "drying_and_tingling_lips", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "increased_appetite", "label": "increased_appetite", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "irregular_sugar_level", "label": "irregular_sugar_level", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "yellow_urine", "label": "yellow_urine", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "receiving_blood_transfusion", "label": "receiving_blood_transfusion", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "acute_liver_failure", "label": "acute_liver_failure", "shape": "dot", "size": 10}, {"color": "#1f456e", "id": "coma", "label": "coma", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"arrows": "to", "color": "#000000", "from": "itching", "label": 1.0, "to": "nodal_skin_eruptions", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "itching", "label": 1.0, "to": "continuous_feel_of_urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "continuous_feel_of_urine", "label": 1.0, "to": "bladder_discomfort", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "skin_rash", "label": 1.0, "to": "scurring", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "skin_rash", "label": 1.0, "to": "red_sore_around_nose", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "scurring", "label": 1.0, "to": "blackheads", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "red_sore_around_nose", "label": 1.0, "to": "blister", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "continuous_sneezing", "label": 1.0, "to": "watering_from_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "shivering", "label": 1.0, "to": "watering_from_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "chills", "label": 1.0, "to": "pain_in_anal_region", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "pain_in_anal_region", "label": 1.0, "to": "pain_during_bowel_movements", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "pain_in_anal_region", "label": 1.0, "to": "bloody_stool", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "joint_pain", "label": 1.0, "to": "hip_joint_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "joint_pain", "label": 1.0, "to": "skin_peeling", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "hip_joint_pain", "label": 1.0, "to": "painful_walking", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "skin_peeling", "label": 1.0, "to": "small_dents_in_nails", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "skin_peeling", "label": 1.0, "to": "inflammatory_nails", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "stomach_pain", "label": 1.0, "to": "ulcers_on_tongue", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "acidity", "label": 1.0, "to": "ulcers_on_tongue", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "muscle_wasting", "label": 1.0, "to": "patches_in_throat", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "vomiting", "label": 1.0, "to": "unsteadiness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "burning_micturition", "label": 1.0, "to": "continuous_feel_of_urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "fatigue", "label": 1.0, "to": "muscle_wasting", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "mood_swings", "label": 1.0, "to": "abnormal_menstruation", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "abnormal_menstruation", "label": 1.0, "to": "enlarged_thyroid", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "abnormal_menstruation", "label": 1.0, "to": "rusty_sputum", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "cough", "label": 1.0, "to": "ulcers_on_tongue", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "high_fever", "label": 1.0, "to": "muscle_wasting", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "sunken_eyes", "label": 1.0, "to": "dehydration", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "indigestion", "label": 1.0, "to": "passage_of_gases", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "headache", "label": 1.0, "to": "pain_behind_the_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "headache", "label": 1.0, "to": "altered_sensorium", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "yellowish_skin", "label": 1.0, "to": "history_of_alcohol_consumption", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "history_of_alcohol_consumption", "label": 1.0, "to": "swelling_of_stomach", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "history_of_alcohol_consumption", "label": 1.0, "to": "fluid_overload.1", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "nausea", "label": 1.0, "to": "belly_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "loss_of_appetite", "label": 1.0, "to": "passage_of_gases", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "loss_of_appetite", "label": 1.0, "to": "prognosis", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "itching", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "skin_rash", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "continuous_sneezing", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "shivering", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "chills", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "joint_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "stomach_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "acidity", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "vomiting", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "burning_micturition", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "spotting_ urination", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "fatigue", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "mood_swings", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "weight_loss", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "restlessness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "lethargy", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "cough", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "high_fever", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "sunken_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "breathlessness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "sweating", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "indigestion", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "headache", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "yellowish_skin", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "dark_urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "nausea", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "back_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "constipation", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "abdominal_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "diarrhoea", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "mild_fever", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "yellowing_of_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "swelled_lymph_nodes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "malaise", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "blurred_and_distorted_vision", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "phlegm", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "throat_irritation", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "chest_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "fast_heart_rate", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "irritation_in_anus", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "neck_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "dizziness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "obesity", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "excessive_hunger", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "extra_marital_contacts", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "knee_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "muscle_weakness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "stiff_neck", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "swelling_joints", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "movement_stiffness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "spinning_movements", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "loss_of_balance", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "weakness_of_one_body_side", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "foul_smell_of urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "internal_itching", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "toxic_look_(typhos)", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "depression", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "irritability", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "muscle_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "red_spots_over_body", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "dischromic _patches", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "polyuria", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "family_history", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "mucoid_sputum", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "lack_of_concentration", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "visual_disturbances", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "receiving_unsterile_injections", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "stomach_bleeding", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "distention_of_abdomen", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "blood_in_sputum", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "palpitations", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "pus_filled_pimples", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "silver_like_dusting", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "prognosis", "label": 1.0, "to": "yellow_crust_ooze", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "back_pain", "label": 1.0, "to": "pain_behind_the_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "back_pain", "label": 1.0, "to": "weakness_in_limbs", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "constipation", "label": 1.0, "to": "pain_in_anal_region", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "constipation", "label": 1.0, "to": "belly_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "diarrhoea", "label": 1.0, "to": "dehydration", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "blurred_and_distorted_vision", "label": 1.0, "to": "abnormal_menstruation", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "throat_irritation", "label": 1.0, "to": "runny_nose", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "runny_nose", "label": 1.0, "to": "redness_of_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "runny_nose", "label": 1.0, "to": "watering_from_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "redness_of_eyes", "label": 1.0, "to": "sinus_pressure", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "redness_of_eyes", "label": 1.0, "to": "congestion", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "redness_of_eyes", "label": 1.0, "to": "loss_of_smell", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "fast_heart_rate", "label": 1.0, "to": "rusty_sputum", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "bloody_stool", "label": 1.0, "to": "pain_during_bowel_movements", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "irritation_in_anus", "label": 1.0, "to": "pain_in_anal_region", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "irritation_in_anus", "label": 1.0, "to": "bloody_stool", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "neck_pain", "label": 1.0, "to": "weakness_in_limbs", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "neck_pain", "label": 1.0, "to": "hip_joint_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "dizziness", "label": 1.0, "to": "weakness_in_limbs", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "cramps", "label": 1.0, "to": "swollen_legs", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "cramps", "label": 1.0, "to": "prominent_veins_on_calf", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_legs", "label": 1.0, "to": "bruising", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "obesity", "label": 1.0, "to": "cramps", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "obesity", "label": 1.0, "to": "swollen_blood_vessels", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_blood_vessels", "label": 1.0, "to": "cramps", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_blood_vessels", "label": 1.0, "to": "bruising", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_blood_vessels", "label": 1.0, "to": "swollen_legs", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_blood_vessels", "label": 1.0, "to": "prominent_veins_on_calf", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "enlarged_thyroid", "label": 1.0, "to": "swollen_extremeties", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swollen_extremeties", "label": 1.0, "to": "brittle_nails", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "brittle_nails", "label": 1.0, "to": "weight_gain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "brittle_nails", "label": 1.0, "to": "cold_hands_and_feets", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "brittle_nails", "label": 1.0, "to": "puffy_face_and_eyes", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "extra_marital_contacts", "label": 1.0, "to": "muscle_wasting", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "extra_marital_contacts", "label": 1.0, "to": "patches_in_throat", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "slurred_speech", "label": 1.0, "to": "anxiety", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "slurred_speech", "label": 1.0, "to": "drying_and_tingling_lips", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "knee_pain", "label": 1.0, "to": "hip_joint_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "swelling_joints", "label": 1.0, "to": "painful_walking", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "movement_stiffness", "label": 1.0, "to": "painful_walking", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "spinning_movements", "label": 1.0, "to": "unsteadiness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "loss_of_balance", "label": 1.0, "to": "unsteadiness", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "weakness_of_one_body_side", "label": 1.0, "to": "altered_sensorium", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "foul_smell_of urine", "label": 1.0, "to": "bladder_discomfort", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "foul_smell_of urine", "label": 1.0, "to": "continuous_feel_of_urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "internal_itching", "label": 1.0, "to": "passage_of_gases", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "toxic_look_(typhos)", "label": 1.0, "to": "belly_pain", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "depression", "label": 1.0, "to": "enlarged_thyroid", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "irritability", "label": 1.0, "to": "abnormal_menstruation", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "dischromic _patches", "label": 1.0, "to": "nodal_skin_eruptions", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "increased_appetite", "label": 1.0, "to": "irregular_sugar_level", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "increased_appetite", "label": 1.0, "to": "swollen_blood_vessels", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "polyuria", "label": 1.0, "to": "cramps", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "polyuria", "label": 1.0, "to": "increased_appetite", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "receiving_unsterile_injections", "label": 1.0, "to": "yellow_urine", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "receiving_unsterile_injections", "label": 1.0, "to": "receiving_blood_transfusion", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "stomach_bleeding", "label": 1.0, "to": "acute_liver_failure", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "stomach_bleeding", "label": 1.0, "to": "coma", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "distention_of_abdomen", "label": 1.0, "to": "swelling_of_stomach", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "distention_of_abdomen", "label": 1.0, "to": "history_of_alcohol_consumption", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "distention_of_abdomen", "label": 1.0, "to": "fluid_overload.1", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "palpitations", "label": 1.0, "to": "slurred_speech", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "pus_filled_pimples", "label": 1.0, "to": "blackheads", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "pus_filled_pimples", "label": 1.0, "to": "scurring", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "inflammatory_nails", "label": 1.0, "to": "small_dents_in_nails", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "silver_like_dusting", "label": 1.0, "to": "skin_peeling", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "silver_like_dusting", "label": 1.0, "to": "inflammatory_nails", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "yellow_crust_ooze", "label": 1.0, "to": "blister", "weight": 1}, {"arrows": "to", "color": "#000000", "from": "yellow_crust_ooze", "label": 1.0, "to": "red_sore_around_nose", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
